@@ -8,11 +8,28 @@ from services.bge_m3_embedding_service import BGEM3EmbeddingService
 
 
 class FakeBGEM3Model:
+    def __init__(self):
+        self.calls = []
+
     def encode_queries(self, queries, **kwargs):
-        return {"dense_vecs": np.ones((len(queries), 8), dtype=np.float32)}
+        self.calls.append(("query", kwargs))
+        return self._output(queries, kwargs)
 
     def encode_corpus(self, documents, **kwargs):
-        return {"dense_vecs": np.ones((len(documents), 8), dtype=np.float32)}
+        self.calls.append(("corpus", kwargs))
+        return self._output(documents, kwargs)
+
+    @staticmethod
+    def _output(texts, kwargs):
+        output = {"colbert_vecs": None}
+        if kwargs.get("return_dense"):
+            output["dense_vecs"] = np.ones((len(texts), 8), dtype=np.float32)
+        if kwargs.get("return_sparse"):
+            output["lexical_weights"] = [
+                {"10": np.float32(0.5), str(20 + index): np.float32(0.25)}
+                for index, _ in enumerate(texts)
+            ]
+        return output
 
 
 class BGEM3AdapterUnitTests(unittest.TestCase):
@@ -54,6 +71,34 @@ class BGEM3AdapterUnitTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.service.encode_documents([])
 
+    def test_hybrid_query_and_documents_use_dense_and_sparse_without_colbert(self):
+        query = self.service.encode_query_hybrid("machine learning")
+        documents = self.service.encode_documents_hybrid(["machine learning", "data mining"])
+        self.assertEqual(query.dense.shape, (8,))
+        self.assertGreater(len(query.sparse), 0)
+        self.assertEqual(documents.dense.shape, (2, 8))
+        self.assertEqual(len(documents.sparse), 2)
+        self.assertTrue(all(np.isfinite(weight) for _, weight in query.sparse.values))
+        self.assertEqual(self.service.hybrid_query_encode_count, 1)
+        self.assertEqual(self.service.hybrid_document_encode_count, 1)
+        for _, kwargs in self.service._model.calls[-2:]:
+            self.assertTrue(kwargs["return_dense"])
+            self.assertTrue(kwargs["return_sparse"])
+            self.assertFalse(kwargs["return_colbert_vecs"])
+
+    def test_sparse_only_interfaces_remain_available(self):
+        query = self.service.encode_query_sparse("machine learning")
+        documents = self.service.encode_documents_sparse(["machine learning"])
+        self.assertGreater(len(query), 0)
+        self.assertEqual(len(documents), 1)
+        self.assertTrue(all(np.isfinite(weight) for _, weight in documents[0].values))
+
+    def test_hybrid_empty_input_is_rejected(self):
+        with self.assertRaises(ValueError):
+            self.service.encode_query_hybrid(" ")
+        with self.assertRaises(ValueError):
+            self.service.encode_documents_hybrid([])
+
 
 @unittest.skipUnless(
     os.getenv("RUN_BGE_M3_INTEGRATION", "false").lower() == "true",
@@ -82,11 +127,12 @@ class BGEM3AdapterIntegrationTests(unittest.TestCase):
 )
 class BGEM3FullCorpusIntegrationTests(unittest.TestCase):
     def test_full_corpus_cache_and_retrieval_are_1024_dimensions(self):
-        from config import get_bge_m3_settings
+        from config import get_bge_m3_settings, get_chunking_settings
         from indexes.in_memory_vector_index import InMemoryVectorIndex
         from repositories.knowledge_repository import KnowledgeRepository
         from retrievers.dense_retriever import DenseRetriever
         from services.embedding_cache import DocumentEmbeddingCache
+        from services.document_chunker import DocumentChunker
 
         project_root = Path(__file__).resolve().parents[1]
         repository = KnowledgeRepository(project_root / "data")
@@ -99,11 +145,17 @@ class BGEM3FullCorpusIntegrationTests(unittest.TestCase):
             embedding_cache=DocumentEmbeddingCache(
                 project_root / "cache" / "embeddings", "bge_m3", enabled=True
             ),
+            document_chunker=DocumentChunker(**get_chunking_settings()),
         )
         results = retriever.retrieve("Siapa Dekan FTMM?", top_k=5)
         self.assertEqual(len(repository.get_documents()), 391)
+        self.assertGreater(retriever.vector_index.document_count, 391)
         self.assertEqual(retriever.vector_index.embedding_dimension, 1024)
-        self.assertEqual(
-            results[0].document.id,
-            "staff-1-dekan-prof-dr-dwi-setyawan-s-si-m-si-apt",
+        self.assertIn(
+            results[0].document.parent_document_id,
+            {
+                "ftmm-overview-1",
+                "staff-1-dekan-prof-dr-dwi-setyawan-s-si-m-si-apt",
+            },
         )
+        self.assertIn("Dwi Setyawan", results[0].document.content)

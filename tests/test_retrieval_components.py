@@ -3,7 +3,7 @@ from pathlib import Path
 
 import numpy as np
 
-from domain.models import Document, RetrievedDocument
+from domain.models import Document, DocumentChunk, QueryIntent, RetrievedDocument, RetrievalPlan
 from indexes.in_memory_vector_index import InMemoryVectorIndex
 from repositories.knowledge_repository import KnowledgeRepository
 from retrievers.dense_retriever import DenseRetriever
@@ -164,7 +164,8 @@ class RetrievalComponentTests(unittest.TestCase):
         retrieved = [RetrievedDocument(self.documents[1], score=0.9)]
         context = ContextBuilder().build_context(retrieved)
         self.assertIn("[SOURCE 1]", context)
-        self.assertIn("Document ID: lecturer-b", context)
+        self.assertIn("Chunk ID: lecturer-b", context)
+        self.assertIn("Parent ID: lecturer-b", context)
         self.assertIn("Research Interest: natural language processing", context)
 
     def test_chat_service_orchestrates_retrieval_context_and_llm(self):
@@ -179,6 +180,112 @@ class RetrievalComponentTests(unittest.TestCase):
         self.assertEqual(result.answer, "jawaban-test")
         self.assertEqual(result.retrieved_documents, retrieved)
         self.assertIn("[SOURCE 1]", llm_service.context)
+
+    def test_vector_index_metadata_filter_limits_document_type(self):
+        index = InMemoryVectorIndex()
+        index.build(
+            self.documents,
+            np.asarray([[1.0, 0.0], [0.9, 0.1], [0.8, 0.2]]),
+        )
+        lecturer = index.search(
+            np.asarray([1.0, 0.0]), top_k=5, metadata_filter={"type": "lecturer"}
+        )
+        course = index.search(
+            np.asarray([1.0, 0.0]), top_k=5, metadata_filter={"type": "course"}
+        )
+        no_filter = index.search(np.asarray([1.0, 0.0]), top_k=5)
+        self.assertTrue(lecturer and all(item.document.metadata["type"] == "lecturer" for item in lecturer))
+        self.assertTrue(course and all(item.document.metadata["type"] == "course" for item in course))
+        self.assertEqual({item.document.metadata["type"] for item in no_filter}, {"course", "lecturer", "staff"})
+
+    def test_vector_index_metadata_filter_supports_and_across_fields(self):
+        chunks = [
+            DocumentChunk("l::profile", "l", "profile", 0, {"type": "lecturer", "chunk_role": "profile"}),
+            DocumentChunk("l::research", "l", "machine learning", 1, {"type": "lecturer", "chunk_role": "research_interest"}),
+            DocumentChunk("c::research", "c", "machine learning", 0, {"type": "course", "chunk_role": "research_interest"}),
+        ]
+        index = InMemoryVectorIndex()
+        index.build(chunks, np.asarray([[0.5, 0.5], [1.0, 0.0], [0.9, 0.1]]))
+        results = index.search(
+            np.asarray([1.0, 0.0]), top_k=5,
+            metadata_filter={"type": "lecturer", "chunk_role": "research_interest"},
+        )
+        self.assertEqual([item.document.id for item in results], ["l::research"])
+
+    def test_retrieval_plan_falls_back_only_when_strict_filter_has_no_candidates(self):
+        index = InMemoryVectorIndex()
+        index.build(self.documents, np.asarray([[1.0, 0.0], [0.9, 0.1], [0.8, 0.2]]))
+        retriever = DenseRetriever(
+            FakeRepository([]), FakeEmbeddingService(), index, min_score=None
+        )
+        plan = RetrievalPlan(
+            query="dosen bidang quantum",
+            intent=QueryIntent.LECTURER,
+            metadata_filter={"type": "lecturer", "chunk_role": "research_interest"},
+            preferred_chunk_role="research_interest",
+        )
+        results = retriever.retrieve_plan(plan, top_k=3)
+        self.assertTrue(results)
+        self.assertTrue(all(item.metadata["type"] == "lecturer" for item in results))
+        self.assertEqual(retriever.last_fallback_used, "type_only")
+
+    def test_intent_feature_flag_false_preserves_unfiltered_behavior(self):
+        class ExplodingRouter:
+            def update_corpus_metadata(self, documents=None):
+                pass
+
+            def route(self, query):
+                raise AssertionError("Router tidak boleh dipanggil.")
+
+        index = InMemoryVectorIndex()
+        index.build(self.documents, np.asarray([[1.0, 0.0], [0.9, 0.1], [0.8, 0.2]]))
+        retriever = DenseRetriever(
+            FakeRepository([]), FakeEmbeddingService(), index, min_score=None,
+            intent_router=ExplodingRouter(), intent_routing_enabled=False,
+        )
+        results = retriever.retrieve("dosen machine learning", top_k=3)
+        self.assertEqual(len(results), 3)
+        self.assertEqual(retriever.last_retrieval_plan.intent, QueryIntent.GENERAL)
+
+    def test_retriever_diversifies_parent_chunks(self):
+        chunks = [
+            DocumentChunk("a::chunk-0000", "a", "alpha satu", 0, {"type": "course"}),
+            DocumentChunk("a::chunk-0001", "a", "alpha dua", 1, {"type": "course"}),
+            DocumentChunk("b::chunk-0000", "b", "beta", 0, {"type": "lecturer"}),
+        ]
+        index = InMemoryVectorIndex()
+        index.build(chunks, np.asarray([[1.0, 0.0], [0.99, 0.01], [0.9, 0.1]]))
+        retriever = DenseRetriever(
+            repository=FakeRepository([]),
+            embedding_service=FakeEmbeddingService(),
+            vector_index=index,
+            top_k=2,
+            min_score=None,
+            max_chunks_per_parent=1,
+            candidate_multiplier=3,
+        )
+        results = retriever.retrieve("alpha", top_k=2)
+        self.assertEqual([item.parent_document_id for item in results], ["a", "b"])
+        self.assertTrue(all(item.chunk_id for item in results))
+
+    def test_chunking_disabled_indexes_parent_documents(self):
+        class DisabledChunker:
+            enabled = False
+            cache_configuration = {"chunking_enabled": False}
+
+            def chunk_documents(self, documents):
+                raise AssertionError("Chunker tidak boleh dipanggil ketika disabled.")
+
+        embedding_service = FakeEmbeddingService()
+        retriever = DenseRetriever(
+            repository=FakeRepository(self.documents),
+            embedding_service=embedding_service,
+            vector_index=InMemoryVectorIndex(),
+            min_score=None,
+            document_chunker=DisabledChunker(),
+        )
+        retriever.initialize()
+        self.assertEqual(retriever.vector_index.document_count, len(self.documents))
 
 
 if __name__ == "__main__":

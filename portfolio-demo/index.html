@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Static portfolio showcase for the FTMM Intelligent Academic Assistant.">
+  <title>FTMM Academic Assistant — Portfolio Showcase</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- PORTFOLIO SHOWCASE ONLY — NO BACKEND CONNECTION -->
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi aplikasi">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">FT</div>
+        <div>
+          <p class="brand-name">FTMM Assistant</p>
+          <p class="brand-label">Academic Intelligence</p>
+        </div>
+      </div>
+
+      <button class="new-chat" type="button" id="new-chat">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        New conversation
+      </button>
+
+      <nav class="sidebar-nav" aria-label="Knowledge navigation">
+        <p class="nav-heading">Knowledge</p>
+        <a href="#" class="nav-item" data-demo-nav>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h6"/></svg>
+          Academic
+        </a>
+        <a href="#" class="nav-item" data-demo-nav>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4h12a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2V4Zm2 0v16"/></svg>
+          Courses
+        </a>
+        <a href="#" class="nav-item" data-demo-nav>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.7-4 3-6 7-6s6.3 2 7 6"/></svg>
+          Lecturers
+        </a>
+        <a href="#" class="nav-item" data-demo-nav>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 10 9-6 9 6M5 10v9h14v-9M9 19v-6h6v6"/></svg>
+          Faculty
+        </a>
+        <a href="#" class="nav-item" data-demo-nav>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h5"/></svg>
+          Documents
+        </a>
+
+        <p class="nav-heading recent-heading">Recent chats</p>
+        <a href="#" class="conversation-link" data-demo-nav>Visi dan Misi FTMM</a>
+        <a href="#" class="conversation-link selected" aria-current="page">Dosen bidang NLP</a>
+        <a href="#" class="conversation-link" data-demo-nav>Pengajuan SKMA</a>
+        <a href="#" class="conversation-link" data-demo-nav>Mata Kuliah Machine Learning</a>
+        <a href="#" class="conversation-link" data-demo-nav>Informasi Dekan</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="footer-dot" aria-hidden="true"></span>
+        <div>
+          <span>Portfolio preview</span>
+          <small>Static presentation layer</small>
+        </div>
+      </div>
+    </aside>
+
+    <button class="sidebar-scrim" id="sidebar-scrim" type="button" aria-label="Tutup navigasi"></button>
+
+    <main class="chat-workspace">
+      <header class="chat-header">
+        <button class="icon-button menu-button" id="menu-button" type="button" aria-label="Buka navigasi">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <div class="header-copy">
+          <div class="eyebrow">FTMM KNOWLEDGE WORKSPACE</div>
+          <h1>FTMM Academic Assistant</h1>
+          <p>Grounded academic information from curated FTMM sources</p>
+        </div>
+        <button class="index-status" id="index-status" type="button" aria-expanded="false" aria-controls="knowledge-popover">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span><strong>Knowledge indexed</strong><small>566 chunks synchronized</small></span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m8 10 4 4 4-4"/></svg>
+        </button>
+        <div class="knowledge-popover" id="knowledge-popover" hidden>
+          <p class="popover-title">Knowledge sources</p>
+          <ul>
+            <li>Courses</li><li>Lecturers</li><li>Academic information</li>
+            <li>Faculty information</li><li>PDF-ready sources</li>
+          </ul>
+          <p>Local index snapshot · Dense retrieval</p>
+        </div>
+      </header>
+
+      <section class="conversation" id="conversation" aria-live="polite">
+        <div class="date-divider"><span>Today</span></div>
+
+        <article class="prior-context" aria-label="Percakapan sebelumnya">
+          <div>
+            <span class="context-label">Earlier in this workspace</span>
+            <p><strong>Siapa Dekan FTMM?</strong></p>
+          </div>
+          <p>Dekan FTMM adalah Prof. Dr. Dwi Setyawan, S.Si., M.Si., Apt. <span class="quiet-reference">[S1]</span></p>
+        </article>
+
+        <article class="message user-message">
+          <div class="message-avatar user-avatar" aria-hidden="true">AM</div>
+          <div class="message-body">
+            <p class="message-author">You</p>
+            <p>Saya tertarik dengan Natural Language Processing. Siapa dosen FTMM yang memiliki bidang penelitian terkait dan mata kuliah apa yang relevan?</p>
+          </div>
+        </article>
+
+        <article class="message assistant-message">
+          <div class="message-avatar assistant-avatar" aria-hidden="true">FT</div>
+          <div class="message-body">
+            <div class="assistant-meta">
+              <p class="message-author">FTMM Academic Assistant</p>
+              <span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m7 12 3 3 7-7"/></svg>Grounded in 3 FTMM sources</span>
+            </div>
+            <div class="answer-content">
+              <p>Beberapa sumber akademik FTMM menunjukkan dosen dengan keterkaitan pada Natural Language Processing. <strong>Maryamah</strong> dan <strong>Muhammad Noor Fakhruzzaman</strong> muncul pada sumber dosen yang relevan dengan bidang tersebut. <button class="citation" type="button" data-source="source-s1" aria-label="Lihat sumber S1">[S1]</button> <button class="citation" type="button" data-source="source-s2" aria-label="Lihat sumber S2">[S2]</button></p>
+              <p>Untuk mata kuliah, <strong>Natural Language Processing</strong> juga tersedia sebagai sumber mata kuliah terkait. <button class="citation" type="button" data-source="source-s3" aria-label="Lihat sumber S3">[S3]</button></p>
+              <p class="answer-note">Informasi ditampilkan sesuai cakupan sumber yang tersedia; detail yang tidak tercantum tidak ditambahkan.</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <footer class="composer-area">
+        <form class="composer" id="composer">
+          <label class="sr-only" for="question-input">Pertanyaan akademik FTMM</label>
+          <textarea id="question-input" rows="1" placeholder="Tanyakan informasi akademik FTMM..." autocomplete="off"></textarea>
+          <div class="composer-actions">
+            <span><kbd>Enter</kbd> to send</span>
+            <button class="send-button" type="submit" aria-label="Kirim pertanyaan">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 14-7-4 14-3-6-7-1Z"/></svg>
+            </button>
+          </div>
+        </form>
+        <p class="composer-caption">Responses in this showcase use static portfolio data.</p>
+      </footer>
+    </main>
+
+    <aside class="source-panel" aria-label="Sumber jawaban">
+      <div class="source-panel-header">
+        <div><span class="eyebrow">RETRIEVAL CONTEXT</span><h2>Sources</h2></div>
+        <span class="source-count" id="source-count">3 referenced</span>
+      </div>
+
+      <div class="source-list" id="source-list">
+        <button class="source-card" id="source-s1" type="button" data-source-card>
+          <span class="source-index">S1</span>
+          <span class="source-copy"><strong>Maryamah</strong><small>Lecturer · Research Interest</small></span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+        <button class="source-card" id="source-s2" type="button" data-source-card>
+          <span class="source-index">S2</span>
+          <span class="source-copy"><strong>Muhammad Noor Fakhruzzaman</strong><small>Lecturer · Research Interest</small></span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+        <button class="source-card" id="source-s3" type="button" data-source-card>
+          <span class="source-index">S3</span>
+          <span class="source-copy"><strong>Natural Language Processing</strong><small>Course · Knowledge record</small></span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+        <button class="source-card demo-document" id="source-s4" type="button" data-source-card>
+          <span class="source-index"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h5"/></svg></span>
+          <span class="source-copy"><strong>Pedoman Akademik FTMM</strong><small>PDF · Halaman 12 · Demo source</small></span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+      </div>
+
+      <section class="knowledge-summary" aria-label="Status knowledge index">
+        <div class="summary-heading">
+          <span class="eyebrow">INDEX SNAPSHOT</span>
+          <span>Local knowledge processing</span>
+        </div>
+        <div class="metric-grid">
+          <div><strong>391</strong><span>Parent documents</span></div>
+          <div><strong>566</strong><span>Indexed chunks</span></div>
+          <div><strong>1024</strong><span>Vector dimensions</span></div>
+          <div><strong>Dense</strong><span>BGE-M3 retrieval</span></div>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+[
+  {
+    "id": "staff-dean",
+    "category": "staff",
+    "query": "Siapa Dekan FTMM?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["staff-1-dekan-prof-dr-dwi-setyawan-s-si-m-si-apt"],
+    "expected_facts": ["Prof. Dr. Dwi Setyawan, S.Si., M.Si., Apt"]
+  },
+  {
+    "id": "staff-vice-dean-1",
+    "category": "staff",
+    "query": "Siapa Wakil Dekan I FTMM?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["staff-2-wakil-dekan-i-prof-dr-nimatuzahroh-dra"],
+    "expected_facts": ["Prof. Dr. Ni’matuzahroh, Dra"]
+  },
+  {
+    "id": "staff-vice-dean-2",
+    "category": "staff",
+    "query": "Siapa Wakil Dekan II FTMM?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["staff-3-wakil-dekan-ii-dr-imron-mawardi-s-p-m-si"],
+    "expected_facts": ["Dr. Imron Mawardi, S.P., M.Si."]
+  },
+  {
+    "id": "staff-vice-dean-3",
+    "category": "staff",
+    "query": "Siapa Wakil Dekan III FTMM?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["staff-4-wakil-dekan-iii-prof-dr-retna-apsari-m-si"],
+    "expected_facts": ["Prof. Dr. Retna Apsari, M.Si."]
+  },
+  {
+    "id": "ftmm-vision",
+    "category": "ftmm",
+    "query": "Apa visi FTMM?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["ftmm-overview-1"],
+    "relevant_sections": ["Visi"],
+    "expected_facts": ["Fakultas teknik unggul dan bermartabat"]
+  },
+  {
+    "id": "ftmm-mission",
+    "category": "ftmm",
+    "query": "Apa misi FTMM?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["ftmm-overview-1"],
+    "relevant_sections": ["Misi"],
+    "expected_facts": ["Menyelenggarakan pendidikan sarjana yang berwawasan internasional"]
+  },
+  {
+    "id": "ftmm-location",
+    "category": "ftmm",
+    "query": "Di mana lokasi FTMM?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["ftmm-overview-1"],
+    "relevant_sections": ["Lokasi", "Lokasi kampus"],
+    "expected_facts": ["Gedung Nano", "Kampus C"]
+  },
+  {
+    "id": "ftmm-programs",
+    "category": "ftmm",
+    "query": "Program studi apa saja yang ada di FTMM?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["ftmm-overview-1"],
+    "relevant_sections": ["Program Studi"],
+    "expected_facts": ["Teknik Robotika dan Kecerdasan Buatan", "Teknologi Sains Data", "Rekayasa Nanoteknologi", "Teknik Industri", "Teknik Elektro"]
+  },
+  {
+    "id": "ftmm-contact",
+    "category": "ftmm",
+    "query": "Apa kontak fakultas FTMM?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["ftmm-overview-1"],
+    "relevant_sections": ["Kontak Fakultas"],
+    "expected_facts": ["info@ftmm.unair.ac.id"]
+  },
+  {
+    "id": "ftmm-multi-source",
+    "category": "multi-source",
+    "query": "Jelaskan FTMM dan apa visinya.",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["ftmm-overview-1"],
+    "relevant_sections": ["Tentang Fakultas", "Visi"],
+    "expected_facts": ["Fakultas Teknologi Maju dan Multidisiplin", "Fakultas teknik unggul dan bermartabat"]
+  },
+  {
+    "id": "lecturer-maryamah",
+    "category": "lecturer",
+    "query": "Siapa Dr. Maryamah?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["lecturer-199507012022103201"],
+    "expected_facts": ["Dr. Maryamah, S.Kom.", "Teknologi Sains Data"]
+  },
+  {
+    "id": "lecturer-nlp",
+    "category": "lecturer",
+    "query": "Siapa dosen yang meneliti NLP?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["lecturer-199507012022103201", "lecturer-199308222020013101"],
+    "expected_facts": ["Dr. Maryamah, S.Kom.", "Muhammad Noor Fakhruzzaman, S.Kom., M.Sc."]
+  },
+  {
+    "id": "lecturer-hci",
+    "category": "lecturer",
+    "query": "Dosen dengan research interest Human-Computer Interaction",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["lecturer-199308222020013101"],
+    "expected_facts": ["Muhammad Noor Fakhruzzaman, S.Kom., M.Sc.", "Human-Computer Interaction"]
+  },
+  {
+    "id": "lecturer-partial-schedule",
+    "category": "lecturer",
+    "query": "Siapa Dr. Maryamah dan kapan jadwal mengajarnya besok?",
+    "expected_answerability": "partially_answerable",
+    "relevant_document_ids": ["lecturer-199507012022103201"],
+    "expected_facts": ["Dr. Maryamah, S.Kom."],
+    "expected_missing": ["jadwal mengajar besok"]
+  },
+  {
+    "id": "course-nlp",
+    "category": "course",
+    "query": "Mata kuliah Natural Language Processing",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["course-sic304"],
+    "expected_facts": ["Natural Language Processing", "SIC304", "3 sks"]
+  },
+  {
+    "id": "course-ml",
+    "category": "course",
+    "query": "Mata kuliah yang membahas machine learning",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["course-sic306"],
+    "expected_facts": ["Machine Learning", "SIC306"]
+  },
+  {
+    "id": "course-ml-credits",
+    "category": "course",
+    "query": "Berapa SKS mata kuliah Machine Learning?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["course-sic306"],
+    "expected_facts": ["3 sks"]
+  },
+  {
+    "id": "academic-skma",
+    "category": "academic",
+    "query": "Bagaimana mengajukan SKMA?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["academic-3-alur-pengajuan-surat-keterangan-mahasiswa-aktif-skma"],
+    "expected_facts": ["Alur Pengajuan Surat Keterangan Mahasiswa Aktif (SKMA)"],
+    "expected_urls": ["https://ftmm.unair.ac.id/alur-pengajuan-surat-keterangan-mahasiswa-aktif-skma/"]
+  },
+  {
+    "id": "academic-recommendation",
+    "category": "academic",
+    "query": "Bagaimana cara mengajukan surat rekomendasi?",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["academic-2-alur-pengajuan-surat-rekomendasi"],
+    "expected_facts": ["Alur Pengajuan Surat Rekomendasi"]
+  },
+  {
+    "id": "academic-leave",
+    "category": "academic",
+    "query": "Informasi pengajuan cuti akademik",
+    "expected_answerability": "answerable",
+    "relevant_document_ids": ["academic-6-alur-pengajuan-cuti-akademik"],
+    "expected_facts": ["Alur Pengajuan Cuti Akademik"]
+  },
+  {
+    "id": "out-weather",
+    "category": "out-of-scope",
+    "query": "Bagaimana cuaca di Surabaya besok?",
+    "expected_answerability": "not_answerable",
+    "relevant_document_ids": [],
+    "expected_facts": []
+  },
+  {
+    "id": "out-crypto",
+    "category": "out-of-scope",
+    "query": "Berapa harga Bitcoin hari ini?",
+    "expected_answerability": "not_answerable",
+    "relevant_document_ids": [],
+    "expected_facts": []
+  },
+  {
+    "id": "out-politics",
+    "category": "out-of-scope",
+    "query": "Siapa presiden Amerika Serikat?",
+    "expected_answerability": "not_answerable",
+    "relevant_document_ids": [],
+    "expected_facts": []
+  },
+  {
+    "id": "out-recipe",
+    "category": "out-of-scope",
+    "query": "Bagaimana resep rendang?",
+    "expected_answerability": "not_answerable",
+    "relevant_document_ids": [],
+    "expected_facts": []
+  },
+  {
+    "id": "general-ml",
+    "category": "out-of-scope",
+    "query": "Apa itu machine learning?",
+    "expected_answerability": "not_answerable",
+    "relevant_document_ids": [],
+    "expected_facts": []
+  },
+  {
+    "id": "false-program",
+    "category": "not-answerable",
+    "query": "Jelaskan Program Studi Kedokteran di FTMM.",
+    "expected_answerability": "not_answerable",
+    "relevant_document_ids": [],
+    "expected_facts": [],
+    "forbidden_facts": ["FTMM memiliki Program Studi Kedokteran"]
+  },
+  {
+    "id": "false-staff",
+    "category": "not-answerable",
+    "query": "Siapa Wakil Dekan IV FTMM?",
+    "expected_answerability": "not_answerable",
+    "relevant_document_ids": [],
+    "expected_facts": [],
+    "forbidden_facts": ["Wakil Dekan IV adalah"]
+  },
+  {
+    "id": "false-course-code",
+    "category": "not-answerable",
+    "query": "Apa mata kuliah dengan kode XYZ999?",
+    "expected_answerability": "not_answerable",
+    "relevant_document_ids": [],
+    "expected_facts": [],
+    "forbidden_facts": ["XYZ999 adalah"]
+  }
+]

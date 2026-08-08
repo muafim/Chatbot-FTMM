@@ -1,58 +1,61 @@
-import logging
+from dataclasses import dataclass, field
+from typing import Protocol
 
 
-logger = logging.getLogger(__name__)
+@dataclass(frozen=True)
+class LLMGeneratedAnswer:
+    answer: str
+    citations: tuple[str, ...]
+    answerability: str
+    warning: str | None = None
+    provider: str | None = None
+    requested_model: str | None = None
+    actual_model: str | None = None
+    usage: dict = field(default_factory=dict)
+    latency_ms: float | None = None
+    provider_calls: int = 1
+
+
+class LLMProvider(Protocol):
+    provider_name: str
+    model_name: str
+
+    def generate_grounded_answer(
+        self,
+        question,
+        grounded_context,
+        evidence_assessment,
+        correction_instruction=None,
+    ) -> LLMGeneratedAnswer:
+        ...
 
 
 class LLMService:
-    """Adapter OpenAI untuk menghasilkan jawaban dari context hasil retrieval."""
+    """Provider-neutral facade used by ChatService."""
 
-    def __init__(self, api_key=None, model_name="gpt-4o-mini"):
-        self.api_key = api_key
-        self.model_name = model_name
+    def __init__(self, provider: LLMProvider):
+        self.provider = provider
 
-    def generate_answer(self, question, context, conversation_history=None):
-        if not self.api_key:
-            return (
-                "Retrieval dataset lokal berhasil, tetapi jawaban belum dapat dibuat "
-                "karena OPENAI_API_KEY belum dikonfigurasi."
-            )
+    @property
+    def provider_name(self):
+        return self.provider.provider_name
 
-        conversation_history = conversation_history or []
-        history_text = "\n".join(
-            f"Pengguna: {exchange['user']}\nBot: {exchange['bot']}"
-            for exchange in conversation_history
+    @property
+    def model_name(self):
+        return self.provider.model_name
+
+    def generate_grounded_answer(
+        self,
+        question,
+        grounded_context,
+        evidence_assessment,
+        conversation_history=None,
+        correction_instruction=None,
+    ):
+        # Stage 7B intentionally does not forward conversation history.
+        return self.provider.generate_grounded_answer(
+            question=question,
+            grounded_context=grounded_context,
+            evidence_assessment=evidence_assessment,
+            correction_instruction=correction_instruction,
         )
-        prompt = (
-            f"{history_text}\nPengguna: {question}\n"
-            f"Informasi Relevan:\n{context}\nBot:"
-        )
-
-        try:
-            from openai import OpenAI
-
-            client = OpenAI(api_key=self.api_key)
-            response = client.chat.completions.create(
-                model=self.model_name,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "Anda adalah asisten yang menjawab pertanyaan tentang FTMM "
-                            "Universitas Airlangga. Gunakan hanya informasi relevan yang "
-                            "diberikan. Jawab dalam Bahasa Indonesia dengan ramah dan "
-                            "profesional."
-                        ),
-                    },
-                    {"role": "user", "content": prompt},
-                ],
-                temperature=0.7,
-            )
-            answer = response.choices[0].message.content
-            return answer.strip() if answer else "OpenAI tidak mengembalikan jawaban."
-        except Exception as exc:
-            logger.error("Permintaan OpenAI gagal. Tipe error: %s.", type(exc).__name__)
-            return (
-                "Permintaan ke OpenAI gagal. Periksa koneksi, API key, dan konfigurasi "
-                "OPENAI_MODEL."
-            )

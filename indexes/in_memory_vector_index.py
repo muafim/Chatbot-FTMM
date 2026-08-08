@@ -17,6 +17,24 @@ class InMemoryVectorIndex:
     def is_built(self):
         return self._embeddings is not None
 
+    @property
+    def document_count(self):
+        return len(self._documents)
+
+    @property
+    def documents(self):
+        return list(self._documents)
+
+    def matching_document_count(self, metadata_filter=None):
+        return sum(
+            not metadata_filter
+            or all(
+                document.metadata.get(key) == value
+                for key, value in metadata_filter.items()
+            )
+            for document in self._documents
+        )
+
     def build(self, documents, embeddings, embedding_model=None):
         document_list = list(documents)
         embedding_matrix = np.asarray(embeddings)
@@ -32,7 +50,9 @@ class InMemoryVectorIndex:
         self.embedding_model = embedding_model
         self.embedding_dimension = int(embedding_matrix.shape[1])
 
-    def search(self, query_vector, top_k=5, embedding_model=None):
+    def search(
+        self, query_vector, top_k=5, embedding_model=None, metadata_filter=None
+    ):
         if not self.is_built:
             raise RuntimeError("In-memory vector index belum dibuat.")
         if top_k <= 0:
@@ -54,12 +74,30 @@ class InMemoryVectorIndex:
                 f"index={self.embedding_model} query={embedding_model}."
             )
 
-        similarities = cosine_similarity(query_matrix, self._embeddings)[0]
-        ranked_indices = np.argsort(similarities)[::-1][:top_k]
+        candidate_indices = np.arange(len(self._documents))
+        if metadata_filter:
+            candidate_indices = np.asarray(
+                [
+                    index
+                    for index, document in enumerate(self._documents)
+                    if all(
+                        document.metadata.get(key) == value
+                        for key, value in metadata_filter.items()
+                    )
+                ],
+                dtype=int,
+            )
+        if candidate_indices.size == 0:
+            return []
+        similarities = cosine_similarity(
+            query_matrix, self._embeddings[candidate_indices]
+        )[0]
+        local_ranked = np.argsort(similarities)[::-1][:top_k]
+        ranked_indices = candidate_indices[local_ranked]
         return [
             RetrievedDocument(
                 document=self._documents[int(index)],
-                score=float(similarities[int(index)]),
+                score=float(similarities[int(local_index)]),
             )
-            for index in ranked_indices
+            for local_index, index in zip(local_ranked, ranked_indices)
         ]

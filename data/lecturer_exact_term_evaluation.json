@@ -1,0 +1,14 @@
+[
+  {"query":"Dosen dengan research interest machine learning","term":"machine learning","retrieval_trait":"lexical_sensitive","relevant_document_ids":["lecturer-199501262020013201","lecturer-199106272020073101","lecturer-199207222022103101","lecturer-199609262023103201"]},
+  {"query":"Dosen dengan research interest natural language processing","term":"natural language processing","retrieval_trait":"lexical_sensitive","relevant_document_ids":["lecturer-199308222020013101","lecturer-199507012022103201"]},
+  {"query":"Dosen dengan research interest image processing","term":"image processing","retrieval_trait":"lexical_sensitive","relevant_document_ids":["lecturer-199410052024023101","lecturer-199106272020073101","lecturer-199111202024037101"]},
+  {"query":"Dosen dengan research interest data mining","term":"data mining","retrieval_trait":"lexical_sensitive","relevant_document_ids":["lecturer-199307082020013201","lecturer-199501262020013201","lecturer-197107122008122001","lecturer-199008262020073201"]},
+  {"query":"Dosen dengan research interest optimization","term":"optimization","retrieval_trait":"lexical_sensitive","relevant_document_ids":["lecturer-199507012022103201","lecturer-199410052024023101","lecturer-199404142018083201","lecturer-199008262020073201","lecturer-197706112020073201"]},
+  {"query":"Dosen dengan research interest artificial intelligence","term":"artificial intelligence","retrieval_trait":"lexical_sensitive","relevant_document_ids":["lecturer-199507012022103201","lecturer-197107122008122001","lecturer-199404142018083201"]},
+  {"query":"Dosen dengan research interest signal processing","term":"signal processing","retrieval_trait":"lexical_sensitive","relevant_document_ids":["lecturer-199210262020013201","lecturer-199106272020073101","lecturer-199207222022103101"]},
+  {"query":"Dosen dengan research interest cloud computing","term":"cloud computing","retrieval_trait":"lexical_sensitive","relevant_document_ids":["lecturer-199308222020013101","lecturer-199111202024037101"]},
+  {"query":"Dosen dengan research interest human-computer interaction","term":"human-computer interaction","retrieval_trait":"lexical_sensitive","relevant_document_ids":["lecturer-199308222020013101"]},
+  {"query":"Dosen dengan research interest data science","term":"data science","retrieval_trait":"lexical_sensitive","relevant_document_ids":["lecturer-199507012022103201","lecturer-199404142018083201"]},
+  {"query":"Dosen dengan research interest applied statistics","term":"applied statistics","retrieval_trait":"lexical_sensitive","relevant_document_ids":["lecturer-199212272024023201","lecturer-199208252024023201"]},
+  {"query":"Dosen dengan research interest internet of things","term":"internet of things","retrieval_trait":"lexical_sensitive","relevant_document_ids":["lecturer-199104012020013101"]}
+]

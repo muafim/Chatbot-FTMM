@@ -1,0 +1,20 @@
+{
+  "fixture_title": "Pedoman Layanan Akademik FTMM 2026",
+  "pages": [
+    "Program Akselerasi Talenta FTMM bernama GARUDA MUDA. Pendaftaran dibuka setiap bulan Agustus melalui Direktorat Akademik.",
+    "Layanan Konsultasi Akademik tersedia di Ruang Helios lantai tiga setiap Selasa pukul 10.00. Narahubung layanan adalah Unit Akademik FTMM.",
+    "Skema Bantuan Riset Mahasiswa bernama NUSA INOVASI. Proposal wajib memuat ringkasan, anggaran, dan persetujuan dosen pembimbing."
+  ],
+  "queries": [
+    {"query": "Apa nama program akselerasi talenta FTMM?", "expected_type": "pdf", "expected_page": 1},
+    {"query": "Kapan pendaftaran GARUDA MUDA dibuka?", "expected_type": "pdf", "expected_page": 1},
+    {"query": "Di mana lokasi layanan konsultasi akademik?", "expected_type": "pdf", "expected_page": 2},
+    {"query": "Kapan konsultasi di Ruang Helios tersedia?", "expected_type": "pdf", "expected_page": 2},
+    {"query": "Siapa narahubung layanan konsultasi?", "expected_type": "pdf", "expected_page": 2},
+    {"query": "Apa nama skema bantuan riset mahasiswa?", "expected_type": "pdf", "expected_page": 3},
+    {"query": "Apa isi wajib proposal NUSA INOVASI?", "expected_type": "pdf", "expected_page": 3},
+    {"query": "Berapa SKS mata kuliah Algoritma?", "expected_type": "course"},
+    {"query": "Siapa Dekan FTMM?", "expected_type": "staff"},
+    {"query": "Bagaimana prosedur pengajuan cuti?", "expected_type": "academic"}
+  ]
+}

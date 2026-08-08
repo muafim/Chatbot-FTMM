@@ -13,6 +13,7 @@ class EmbeddingService:
         self.device = device
         self._model = None
         self.model_load_seconds = None
+        self.model_load_count = 0
 
     @property
     def is_loaded(self):
@@ -44,6 +45,7 @@ class EmbeddingService:
             )
 
         self.model_load_seconds = time.perf_counter() - started_at
+        self.model_load_count += 1
 
         return self._model
 

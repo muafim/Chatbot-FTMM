@@ -154,16 +154,42 @@ def _slug(value):
 class KnowledgeRepository:
     """Muat CSV dan normalisasikan seluruh record menjadi Document."""
 
-    def __init__(self, data_directory):
+    def __init__(self, data_directory, pdf_repository=None, knowledge_registry=None):
         self.data_directory = Path(data_directory)
+        self.pdf_repository = pdf_repository
+        self.knowledge_registry = knowledge_registry
         self.errors = []
         self.load_seconds = 0.0
         self._documents = None
+        self._pending_registry = None
 
     def get_documents(self):
         if self._documents is None:
             self._documents = self._load_documents()
         return list(self._documents)
+
+    def record_retrieval_units(self, documents):
+        if self.pdf_repository is not None:
+            self.pdf_repository.record_chunk_counts(documents)
+
+    def prepare_registry_update(self, chunks):
+        if self.knowledge_registry is None:
+            return None
+        invalid = self.pdf_repository.invalid_source_snapshots() if self.pdf_repository else ()
+        snapshots = self.knowledge_registry.build_snapshots(
+            self.get_documents(), chunks, invalid_entries=invalid
+        )
+        plan = self.knowledge_registry.plan(snapshots)
+        self._pending_registry = (snapshots, plan)
+        return plan
+
+    def commit_registry_update(self):
+        if self.knowledge_registry is None or self._pending_registry is None:
+            return None
+        snapshots, plan = self._pending_registry
+        result = self.knowledge_registry.commit(snapshots, plan=plan)
+        self._pending_registry = None
+        return result
 
     def _load_documents(self):
         started_at = time.perf_counter()
@@ -198,6 +224,12 @@ class KnowledgeRepository:
                 document_type,
                 path.name,
             )
+
+        if self.pdf_repository is not None:
+            pdf_documents = self.pdf_repository.load_documents()
+            documents.extend(pdf_documents)
+            self.errors.extend(self.pdf_repository.errors)
+            logger.info("Memuat %s parent document dari PDF.", len(pdf_documents))
 
         self.load_seconds = time.perf_counter() - started_at
         return documents

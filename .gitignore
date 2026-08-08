@@ -1,11 +1,76 @@
+# Secrets and environment
 .env
-.venv/
-venv/
+.env.*
+!.env.example
+
+# Python generated files
 __pycache__/
 *.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Test, type-checking, lint, and coverage artifacts
 .pytest_cache/
-flask_session/
-cache/embeddings/
-cache/evaluations/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Runtime cache and generated indexes
+cache/
+
+# Local knowledge documents (keep the directory placeholder)
+data/pdfs/*
+!data/pdfs/.gitkeep
+
+# Model weights and local model caches
+models/
+model-cache/
+model_cache/
+.cache/
+huggingface/
+hf_cache/
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+pytorch_model*.bin
 *.pkl
+
+# Flask and local runtime state
+flask_session/
+.flask_session/
+sessions/
+instance/
+
+# Logs and temporary files
+*.log
+logs/
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Optional local frontend tooling
+node_modules/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Operating system artifacts
 .DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local project archives and internal documentation
+README_TECHNICAL_BACKUP.md
+Chatbot Fakultas/

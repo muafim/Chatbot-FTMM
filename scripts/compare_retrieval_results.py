@@ -19,7 +19,10 @@ def main():
     bge_cases = {case["query"]: case for case in bge["cases"]}
     for baseline_case in baseline["cases"]:
         bge_case = bge_cases[baseline_case["query"]]
-        top_three = ", ".join(item["document_id"] for item in bge_case["top_5"][:3])
+        top_three = ", ".join(
+            item.get("parent_document_id", item.get("document_id"))
+            for item in bge_case["top_5"][:3]
+        )
         expected = ",".join(baseline_case["relevant_document_ids"])
         print(
             f"{baseline_case['query']} | {expected} | "

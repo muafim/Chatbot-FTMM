@@ -31,7 +31,35 @@
           <div class="chat-history">
             {% for exchange in chat_history %}
               <div class="chat-message user-message">{{ exchange.user }}</div>
-              <div class="chat-message bot-message">{{ exchange.bot }}</div>
+              <div class="bot-response">
+                <div class="chat-message bot-message">{{ exchange.bot }}</div>
+                {% if exchange.warning %}<div class="grounding-warning">{{ exchange.warning }}</div>{% endif %}
+                {% if exchange.sources %}
+                  <section class="source-list" aria-label="Sumber jawaban">
+                    <h2>Sumber</h2>
+                    {% for source in exchange.sources %}
+                      <article class="source-card" id="source-{{ source.source_id }}">
+                        <div class="source-heading">
+                          <strong>[{{ source.source_id }}] {{ source.title }}</strong>
+                          <span>{{ source.source_type }}</span>
+                        </div>
+                        {% if source.section %}<div>Bagian: {{ source.section }}</div>{% endif %}
+                        {% if source.metadata and source.metadata.source_file %}
+                          <div>File: {{ source.metadata.source_file }}</div>
+                        {% endif %}
+                        {% if source.metadata and source.metadata.page_start %}
+                          <div>Halaman: {{ source.metadata.page_start }}{% if source.metadata.page_end and source.metadata.page_end != source.metadata.page_start %}–{{ source.metadata.page_end }}{% endif %}</div>
+                        {% endif %}
+                        <div class="source-trace">Chunk: {{ source.chunk_id }}</div>
+                        {% if source.supporting_excerpt %}
+                          <details><summary>Cuplikan sumber</summary><p>{{ source.supporting_excerpt }}</p></details>
+                        {% endif %}
+                        {% if source.url %}<a href="{{ source.url }}" rel="noopener noreferrer">Buka sumber</a>{% endif %}
+                      </article>
+                    {% endfor %}
+                  </section>
+                {% endif %}
+              </div>
             {% endfor %}
           </div>
           <form method="post" class="chat-form">

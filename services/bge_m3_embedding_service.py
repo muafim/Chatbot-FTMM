@@ -3,6 +3,8 @@ import time
 
 import numpy as np
 
+from domain.models import HybridEmbedding, HybridEmbeddingBatch, SparseVector
+
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +29,7 @@ class BGEM3EmbeddingError(RuntimeError):
 
 
 class BGEM3EmbeddingService:
-    """Adapter dense-only BGE-M3 yang kompatibel dengan interface EmbeddingService."""
+    """Adapter BGE-M3 dense/sparse dengan satu lazy-loaded model instance."""
 
     def __init__(
         self,
@@ -62,6 +64,9 @@ class BGEM3EmbeddingService:
         self.embedding_dimension = None
         self._model = None
         self.model_load_seconds = None
+        self.model_load_count = 0
+        self.hybrid_query_encode_count = 0
+        self.hybrid_document_encode_count = 0
 
     @property
     def is_loaded(self):
@@ -143,6 +148,7 @@ class BGEM3EmbeddingService:
                 self.precision,
             )
             self.model_load_seconds = time.perf_counter() - started_at
+            self.model_load_count += 1
             return self._model
         except Exception as exc:
             self._model = None
@@ -190,6 +196,67 @@ class BGEM3EmbeddingService:
         except Exception as exc:
             raise self._friendly_error("gagal meng-encode document", exc) from exc
 
+    def encode_query_sparse(self, query):
+        if not query or not query.strip():
+            raise ValueError("Query BGE-M3 tidak boleh kosong.")
+        output = self._encode_native([query], is_query=True, dense=False, sparse=True)
+        return self._validate_sparse_vectors(output, 1)[0]
+
+    def encode_documents_sparse(self, texts):
+        document_texts = self._validate_document_texts(texts)
+        output = self._encode_native(
+            document_texts, is_query=False, dense=False, sparse=True
+        )
+        return self._validate_sparse_vectors(output, len(document_texts))
+
+    def encode_query_hybrid(self, query):
+        if not query or not query.strip():
+            raise ValueError("Query BGE-M3 tidak boleh kosong.")
+        output = self._encode_native([query], is_query=True, dense=True, sparse=True)
+        dense = self._validate_dense_vectors(output, 1)[0]
+        sparse = self._validate_sparse_vectors(output, 1)[0]
+        self.hybrid_query_encode_count += 1
+        return HybridEmbedding(dense=dense, sparse=sparse)
+
+    def encode_documents_hybrid(self, texts):
+        document_texts = self._validate_document_texts(texts)
+        output = self._encode_native(
+            document_texts, is_query=False, dense=True, sparse=True
+        )
+        dense = self._validate_dense_vectors(output, len(document_texts))
+        sparse = self._validate_sparse_vectors(output, len(document_texts))
+        self.hybrid_document_encode_count += 1
+        return HybridEmbeddingBatch(dense=dense, sparse=tuple(sparse))
+
+    def _encode_native(self, texts, is_query, dense, sparse):
+        try:
+            method = (
+                self.load_model().encode_queries
+                if is_query else self.load_model().encode_corpus
+            )
+            return method(
+                texts,
+                batch_size=1 if is_query else self.batch_size,
+                max_length=self.max_length,
+                return_dense=dense,
+                return_sparse=sparse,
+                return_colbert_vecs=False,
+            )
+        except (ValueError, BGEM3EmbeddingError):
+            raise
+        except Exception as exc:
+            subject = "query" if is_query else "document"
+            raise self._friendly_error(f"gagal meng-encode {subject}", exc) from exc
+
+    @staticmethod
+    def _validate_document_texts(texts):
+        document_texts = list(texts)
+        if not document_texts:
+            raise ValueError("Daftar document BGE-M3 tidak boleh kosong.")
+        if any(not text or not str(text).strip() for text in document_texts):
+            raise ValueError("Document BGE-M3 tidak boleh berisi teks kosong.")
+        return document_texts
+
     def _validate_dense_vectors(self, output, expected_count):
         if not isinstance(output, dict) or "dense_vecs" not in output:
             raise BGEM3EmbeddingError("BGE-M3 tidak mengembalikan dense_vecs.")
@@ -215,6 +282,28 @@ class BGEM3EmbeddingService:
             raise BGEM3EmbeddingError(
                 "Dimensi dense vector BGE-M3 berubah dalam instance yang sama."
             )
+        return vectors
+
+    @staticmethod
+    def _validate_sparse_vectors(output, expected_count):
+        if not isinstance(output, dict) or "lexical_weights" not in output:
+            raise BGEM3EmbeddingError("BGE-M3 tidak mengembalikan lexical_weights.")
+        raw_vectors = output["lexical_weights"]
+        if not isinstance(raw_vectors, (list, tuple)) or len(raw_vectors) != expected_count:
+            raise BGEM3EmbeddingError(
+                "Jumlah sparse vector BGE-M3 tidak sesuai jumlah input."
+            )
+        vectors = []
+        for raw_vector in raw_vectors:
+            if not hasattr(raw_vector, "items"):
+                raise BGEM3EmbeddingError("Sparse vector BGE-M3 bukan mapping.")
+            try:
+                vector = SparseVector.from_mapping(raw_vector)
+            except ValueError as exc:
+                raise BGEM3EmbeddingError(str(exc)) from exc
+            if not vector.values:
+                raise BGEM3EmbeddingError("Sparse vector BGE-M3 kosong.")
+            vectors.append(vector)
         return vectors
 
     def _friendly_error(self, action, exc):
