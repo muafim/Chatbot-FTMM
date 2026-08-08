@@ -292,7 +292,7 @@ The main configuration is environment-driven. Secrets belong only in `.env`, whi
 
 ```dotenv
 OPENAI_API_KEY=
-OPENAI_MODEL=gpt-4o-mini
+OPENAI_MODEL=gpt-5.4-nano
 FLASK_SECRET_KEY=
 FLASK_DEBUG=false
 
