@@ -31,20 +31,20 @@ Open [`portfolio-demo/index.html`](portfolio-demo/index.html) directly in a brow
 
 ## Features
 
-- **Multilingual semantic retrieval** — dense semantic search over Indonesian and English academic terms.
-- **BGE-M3 embeddings** — 1024-dimensional dense representations through FlagEmbedding.
-- **Intent-aware retrieval** — deterministic query routing and metadata filters before vector search.
-- **Structured knowledge representation** — stable parent and chunk identities for courses, lecturers, academic information, faculty records, staff, and PDFs.
-- **PDF knowledge ingestion** — local extraction with one parent document per extractable page.
-- **Page-level traceability** — PDF title, source identity, page number, and chunk identity are preserved through retrieval.
-- **Grounding and citations** — answer-scoped `[S1]`, `[S2]`, and `[S3]` mappings connect claims to retrieved sources.
-- **No-answer handling** — unsupported or insufficiently evidenced requests do not silently become generated facts.
-- **Knowledge registry** — deterministic SHA-256 source versions with active, superseded, removed, and invalid states.
-- **Incremental embedding reuse** — unchanged CSV and PDF chunks reuse valid cached vectors.
-- **Chunk-addressable embedding cache** — persistent NPZ vectors with validated JSON identity/configuration mappings.
-- **Optional OpenAI generation** — OpenAI Responses API with Structured Outputs is available for grounded answer composition.
-- **Experimental retrieval paths** — native BGE-M3 sparse/hybrid retrieval and reranking remain isolated and disabled by default.
-- **Offline knowledge processing** — source discovery, extraction, chunking, embedding, indexing, and evaluation can run without OpenAI.
+- **Multilingual semantic retrieval**: dense semantic search over Indonesian and English academic terms.
+- **BGE-M3 embeddings**: 1024-dimensional dense representations through FlagEmbedding.
+- **Intent-aware retrieval**: deterministic query routing and metadata filters before vector search.
+- **Structured knowledge representation**: stable parent and chunk identities for courses, lecturers, academic information, faculty records, staff, and PDFs.
+- **PDF knowledge ingestion**: local extraction with one parent document per extractable page.
+- **Page-level traceability**: PDF title, source identity, page number, and chunk identity are preserved through retrieval.
+- **Grounding and citations**: answer-scoped `[S1]`, `[S2]`, and `[S3]` mappings connect claims to retrieved sources.
+- **No-answer handling**: unsupported or insufficiently evidenced requests do not silently become generated facts.
+- **Knowledge registry**: deterministic SHA-256 source versions with active, superseded, removed, and invalid states.
+- **Incremental embedding reuse**: unchanged CSV and PDF chunks reuse valid cached vectors.
+- **Chunk-addressable embedding cache**: persistent NPZ vectors with validated JSON identity/configuration mappings.
+- **Optional OpenAI generation**: OpenAI Responses API with Structured Outputs is available for grounded answer composition.
+- **Experimental retrieval paths**: native BGE-M3 sparse/hybrid retrieval and reranking remain isolated and disabled by default.
+- **Offline knowledge processing**: source discovery, extraction, chunking, embedding, indexing, and evaluation can run without OpenAI.
 
 ## Architecture
 
