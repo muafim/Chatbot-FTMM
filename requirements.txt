@@ -1,0 +1,9 @@
+Flask>=3.0,<4
+Flask-Session>=0.8,<1
+FlagEmbedding==1.4.0
+numpy>=1.26,<3
+openai>=1.30,<2
+pandas>=2.2,<4
+python-dotenv>=1.0,<2
+scikit-learn>=1.4,<2
+sentence-transformers>=3.0,<6

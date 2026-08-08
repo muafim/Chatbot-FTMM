@@ -1,0 +1,22 @@
+[
+  {"category": "ftmm", "query": "Apa itu FTMM?", "relevant_document_ids": ["ftmm-overview-1"]},
+  {"category": "ftmm", "query": "Apa visi FTMM?", "relevant_document_ids": ["ftmm-overview-1"]},
+  {"category": "ftmm", "query": "Di mana lokasi kampus FTMM?", "relevant_document_ids": ["ftmm-overview-1"]},
+  {"category": "staff", "query": "Siapa Dekan FTMM?", "relevant_document_ids": ["staff-1-dekan-prof-dr-dwi-setyawan-s-si-m-si-apt"]},
+  {"category": "staff", "query": "Siapa Wakil Dekan I FTMM?", "relevant_document_ids": ["staff-2-wakil-dekan-i-prof-dr-nimatuzahroh-dra"]},
+  {"category": "staff", "query": "Siapa Wakil Dekan II FTMM?", "relevant_document_ids": ["staff-3-wakil-dekan-ii-dr-imron-mawardi-s-p-m-si"]},
+  {"category": "staff", "query": "Siapa Wakil Dekan III FTMM?", "relevant_document_ids": ["staff-4-wakil-dekan-iii-prof-dr-retna-apsari-m-si"]},
+  {"category": "lecturer", "query": "Siapa Dr. Maryamah?", "relevant_document_ids": ["lecturer-199507012022103201"]},
+  {"category": "lecturer", "query": "Dosen yang meneliti natural language processing", "relevant_document_ids": ["lecturer-199507012022103201", "lecturer-199308222020013101"]},
+  {"category": "lecturer", "query": "Dosen dengan research interest Human-Computer Interaction", "relevant_document_ids": ["lecturer-199308222020013101"]},
+  {"category": "lecturer", "query": "Dosen yang fokus machine learning", "relevant_document_ids": ["lecturer-199501262020013201", "lecturer-199106272020073101", "lecturer-199609262023103201"]},
+  {"category": "course", "query": "Mata kuliah Natural Language Processing", "relevant_document_ids": ["course-sic304"]},
+  {"category": "course", "query": "Mata kuliah yang berkaitan dengan machine learning", "relevant_document_ids": ["course-sic306", "course-machine-learning-praktikum"]},
+  {"category": "course", "query": "Mata kuliah dengan kode SIC306", "relevant_document_ids": ["course-sic306"]},
+  {"category": "course", "query": "Mata kuliah Pengantar Basis Data", "relevant_document_ids": ["course-sid206"]},
+  {"category": "academic", "query": "Bagaimana cara mengajukan surat mahasiswa aktif?", "relevant_document_ids": ["academic-3-alur-pengajuan-surat-keterangan-mahasiswa-aktif-skma"]},
+  {"category": "academic", "query": "Bagaimana cara mengajukan surat rekomendasi?", "relevant_document_ids": ["academic-2-alur-pengajuan-surat-rekomendasi"]},
+  {"category": "academic", "query": "Informasi pengajuan cuti akademik", "relevant_document_ids": ["academic-6-alur-pengajuan-cuti-akademik"]},
+  {"category": "academic", "query": "Bagaimana jika terlambat membayar UKT?", "relevant_document_ids": ["academic-8-alur-pengajuan-terlambat-bayar-ukt"]},
+  {"category": "academic", "query": "Pengantar untuk KTM yang hilang", "relevant_document_ids": ["academic-9-alur-pengajuan-pengantar-ktm-hilang"]}
+]

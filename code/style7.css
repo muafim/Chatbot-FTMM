@@ -1,0 +1,230 @@
+/* style2.css */
+
+/* Reset dan dasar */
+* {
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden; /* Menghilangkan scroll bar di layar utama */
+    background-color: #1E90FF; /* Biru Laut Background */
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+  
+  /* Header */
+  header {
+    background-color: #104E8B; /* Darker Sea Blue */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    flex-shrink: 0; /* Tidak mengecil */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  header .logo {
+    position: absolute;
+    left: 20px;
+    height: 50px; /* Sesuaikan ukuran logo */
+  }
+  
+  header h1 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  /* Tombol Reset dan Evaluasi */
+  .reset-form, .evaluate-form {
+    position: absolute;
+    right: 20px;
+  }
+  
+  .evaluate-form {
+    right: 120px; /* Jarak dari tombol Reset */
+  }
+  
+  .reset-button, .evaluate-button {
+    background-color: #FF6347; /* Tomato */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 10px; /* Jarak antar tombol */
+  }
+  
+  .reset-button:hover, .evaluate-button:hover {
+    background-color: #FF4500; /* Orange Red */
+  }
+  
+  /* Tombol Evaluasi Khusus */
+  .evaluate-button {
+    background-color: #32CD32; /* Lime Green */
+  }
+  
+  .evaluate-button:hover {
+    background-color: #228B22; /* Forest Green */
+  }
+  
+  /* Main Content */
+  main {
+    flex: 1; /* Mengisi sisa ruang */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: white; /* Latar belakang putih untuk area chat */
+  }
+  
+  .chat-container {
+    width: 80%; /* 80% dari lebar layar */
+    max-width: 800px; /* Lebar maksimal yang lebih kecil untuk tampilan lebih baik */
+    height: 600px; /* Tinggi yang lebih besar untuk lebih banyak pesan */
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 15px; /* Ujung melengkung */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Bayangan lebih halus */
+  }
+  
+  .chat-history {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto; /* Scroll bar di chatbox */
+    background-color: #F0FFFF; /* Azure (Biru Laut Muda) */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .chat-message {
+    margin-bottom: 15px;
+    line-height: 1.5;
+    padding: 10px 15px;
+    border-radius: 20px; /* Ujung melengkung */
+    max-width: 75%; /* Maksimal lebar pesan */
+    word-wrap: break-word;
+    font-size: 16px;
+    position: relative;
+    animation: fadeIn 0.3s ease-in;
+  }
+  
+  /* Pesan Pengguna */
+  .user-message {
+    background-color: #4682B4; /* Sea Blue untuk pesan pengguna */
+    align-self: flex-end;
+    color: white;
+    border-bottom-right-radius: 0;
+    text-align: right; /* Rata kanan */
+  }
+  
+  /* Pesan Bot */
+  .bot-message {
+    background-color: #1E90FF; /* Dodger Blue untuk pesan bot */
+    align-self: flex-start;
+    color: white;
+    border-bottom-left-radius: 0;
+    text-align: left; /* Rata kiri */
+  }
+  
+  /* Animasi */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  /* Form Chat */
+  .chat-form {
+    display: flex;
+    padding: 15px 20px;
+    background-color: #F8F8FF; /* Ghost White */
+    border-top: 1px solid #ddd;
+  }
+  
+  .chat-form input[type="text"] {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid #1E90FF; /* Sea Blue */
+    border-radius: 20px;
+    margin-right: 10px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .chat-form input[type="text"]:focus {
+    border-color: #104E8B; /* Darker Sea Blue */
+  }
+  
+  .chat-form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #1E90FF; /* Sea Blue */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .chat-form button:hover {
+    background-color: #104E8B; /* Darker Sea Blue */
+  }
+  
+  /* Footer */
+  footer {
+    background-color: #104E8B; /* Darker Sea Blue */
+    color: white;
+    padding: 10px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  
+  /* Menghilangkan scroll bar utama tetapi tetap ada di chatbox */
+  body::-webkit-scrollbar {
+    display: none;
+  }
+  
+  body {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  /* Responsif untuk perangkat kecil */
+  @media (max-width: 600px) {
+    .chat-container {
+      width: 95%;
+      max-width: none;
+      height: 80vh;
+    }
+  
+    .chat-message {
+      max-width: 85%;
+    }
+  
+    .reset-form, .evaluate-form {
+      position: static;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+    }
+  
+    .reset-button, .evaluate-button {
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+  }
+  

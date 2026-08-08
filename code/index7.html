@@ -1,0 +1,54 @@
+<!-- index.html -->
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <title>Chatbot FTMM</title>
+    <!-- Link ke Google Fonts untuk font yang lebih baik -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Link ke file CSS eksternal -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style7.css') }}">
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header>
+        <img src="{{ url_for('static', filename='images/logo_unair.png') }}" alt="Logo UnaIR" class="logo">
+        <h1>Chatbot FTMM</h1>
+        <!-- Tombol Reset -->
+        <form action="{{ url_for('reset') }}" method="get" class="reset-form">
+          <button type="submit" class="reset-button">Reset Chat</button>
+        </form>
+        <!-- Tombol Evaluasi -->
+        <form action="{{ url_for('evaluate') }}" method="get" class="evaluate-form">
+          <button type="submit" class="evaluate-button">Evaluasi Model</button>
+        </form>
+      </header>
+
+      <!-- Main Content (Chatbox) -->
+      <main>
+        <div class="chat-container">
+          <div class="chat-history">
+            {% for exchange in chat_history %}
+              <div class="chat-message user-message">
+                {{ exchange.user }}
+              </div>
+              <div class="chat-message bot-message">
+                {{ exchange.bot | safe }}
+              </div>
+            {% endfor %}
+          </div>
+          <form method="post" class="chat-form">
+            <input type="text" id="query" name="query" placeholder="Masukkan pertanyaan Anda..." autocomplete="off" required>
+            <button type="submit">Tanya</button>
+          </form>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer>
+        <p>&copy; {{ current_year }} Universitas Airlangga</p>
+      </footer>
+    </div>
+  </body>
+</html>

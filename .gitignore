@@ -1,0 +1,11 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+flask_session/
+cache/embeddings/
+cache/evaluations/
+*.pkl
+.DS_Store
